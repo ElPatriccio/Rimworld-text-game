@@ -13,6 +13,16 @@ weapon_base = [
         ["SMG", 3, 5, None],
     ]
 
+human_base = [
+    ["Markus", "Male"],
+    ["Anna", "Female"],
+    ["Jens", "Female"],
+    ["Noah", "Male"],
+    ["Isaak", "Male"],
+    ["Jakob", "Male"],
+    ["Patrick", "deinemama"]
+]
+
 def rand(max):
     return randint(0, max)
 
@@ -29,6 +39,8 @@ def generate_weapons():
         weapons.append(Weapon(weapon_base[index][0], weapon_base[index][1], weapon_base[index][2], weapon_base[index][3]))
     return weapons
 
+def generate_people():
+    people = []
 class Consts():
     colonists = [
         Colonist("Markus", "Male", 26, 20), 
