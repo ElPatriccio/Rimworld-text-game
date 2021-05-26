@@ -1,7 +1,6 @@
 from math import floor
 from TextGenerator import TFormats
 from random import randint
-import time
 
 class Weapon():
     def __init__(self, name, shots, damage, short_name = None, rarity= None) -> None:
@@ -15,8 +14,7 @@ class Weapon():
             self.rarity = "common"
         else:
             self.rarity = rarity
-        
-        #self.color = TFormats.rarities[self.rarity]
+
         self.shots = shots
         self.damage = damage
         self.status = 1

@@ -1,9 +1,9 @@
 from TextGenerator import TextGenerator
-import random
-import time
 from Health import Health
 from Weapon import Weapon
 from os import system
+import random
+import time
 
 class Human():
     def __init__(self, name, gender, age, skill) -> None:

@@ -1,5 +1,6 @@
+from Weapon import Weapon
 import random
-from consts import Consts
+from consts import Consts, ObjectSpawner
 import time
 from math import floor
 from TextGenerator import TextGenerator
@@ -32,9 +33,7 @@ class RimWorld():
         self.enemies = enemies
 
         for e in self.enemies:
-            weapon = Consts.weapons[random.randint(0, len(Consts.weapons) - 1)]
-            weapon.rarity = weapon.get_random_rarity()
-            e.weapon = weapon
+            e.weapon = ObjectSpawner().generate_weapons(1)[0]
 
         text_generator.clear_terminal()
         print(text_generator.get_start_message(len(self.colonists), len(self.weapons), self.silver, len(self.enemies)))
