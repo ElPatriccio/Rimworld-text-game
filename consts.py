@@ -29,7 +29,6 @@ def generate_weapons():
         weapons.append(Weapon(weapon_base[index][0], weapon_base[index][1], weapon_base[index][2], weapon_base[index][3]))
     return weapons
 
-
 class Consts():
     colonists = [
         Colonist("Markus", "Male", 26, 20), 
@@ -37,12 +36,8 @@ class Consts():
         #Colonist("Fred", "Male", 77, 0)
         ]
     
-    #weapons = generate_weapons()
-    weapons = [
-        Weapon("Revolver", 1, 10),
-        Weapon("Bolt-Action-Rifle", 2, 8, "bar"),
-        Weapon("SMG", 3, 5)
-    ]
+    weapons = generate_weapons()
+    
     enemies = [
         Enemy("Huso", "Male", 32, 10),
         Enemy("Kek", "Female", 19, 10)
