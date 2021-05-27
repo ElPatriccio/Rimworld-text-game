@@ -1,13 +1,9 @@
-from Weapon import Weapon
 import random
 from consts import Consts, ObjectSpawner
 import time
-from math import floor
 from TextGenerator import TextGenerator
 
 battle_not_over = True
-
-text_generator = TextGenerator()
 
 class RimWorld():
     __game_cases = {
@@ -35,38 +31,39 @@ class RimWorld():
         for e in self.enemies:
             e.weapon = ObjectSpawner().generate_weapons(1)[0]
 
-        text_generator.clear_terminal()
-        print(text_generator.get_start_message(len(self.colonists), len(self.weapons), self.silver, len(self.enemies)))
+        TextGenerator().clear_terminal()
+        print(TextGenerator().get_start_message(len(self.colonists), len(self.weapons), self.silver, len(self.enemies)))
         time.sleep(4)
         self.advance_game()
+    
 
     def advance_game(self):
-        text_generator.clear_terminal()
-        action = input(text_generator.get_action_menue())
+        TextGenerator().clear_terminal()
+        action = input(TextGenerator().get_action_menue())
 
         if self.__game_cases.get(action, None) != None:
             action = self.__game_cases[action]
             if action == 0:
-                text_generator.clear_terminal()
-                print(text_generator.view_people_stats("colonist", self.colonists))
-                input(text_generator.get_press_enter())
+                TextGenerator().clear_terminal()
+                print(TextGenerator().view_people_stats("colonist", self.colonists))
+                input(TextGenerator().get_press_enter())
             
             elif action == 1:
-                text_generator.clear_terminal()
-                print(text_generator.view_equipable_weapons(self.weapons))
-                input(text_generator.get_press_enter())
+                TextGenerator().clear_terminal()
+                print(TextGenerator().view_equipable_weapons(self.weapons))
+                input(TextGenerator().get_press_enter())
 
             elif action == 2:
-                text_generator.clear_terminal()
+                TextGenerator().clear_terminal()
                 self.give_weapon_to_colonist()
 
             elif action == 3:
-                text_generator.clear_terminal()
-                print(text_generator.view_people_stats("enemy", self.enemies))
-                input(text_generator.get_press_enter())
+                TextGenerator().clear_terminal()
+                print(TextGenerator().view_people_stats("enemy", self.enemies))
+                input(TextGenerator().get_press_enter())
 
             elif action == 4:
-                term = input(text_generator.get_attack_enemies())
+                term = input(TextGenerator().get_attack_enemies())
                 if  term == "y":
                     self.advance_battle()
                 else:
@@ -79,7 +76,7 @@ class RimWorld():
         while battle_status < 1:            
             battle_status = self.advance_battle_loop(colonist)
             
-        text_generator.clear_terminal()
+        TextGenerator().clear_terminal()
 
         for c in self.colonists:
             c.health.reset_protection()
@@ -101,39 +98,40 @@ class RimWorld():
     def advance_battle_loop(self, colonist):
         for c in self.colonists:
             c.health.reset_protection()
-            text_generator.clear_terminal()
+            TextGenerator().clear_terminal()
             if colonist == c or not colonist:
                 if c.health.status == "Alive":
-                    action = input(text_generator.get_battle_action_menue(c.name))
+                    action = input(TextGenerator().get_battle_action_menue(c.name))
                     
                     if self.__battle_cases.get(action, None) != None:
                         action = self.__battle_cases[action]
                         if action == 0:
-                            text_generator.clear_terminal()
-                            print(text_generator.view_people_stats("colonist", self.colonists, c))
-                            input(text_generator.get_press_enter())
+                            TextGenerator().clear_terminal()
+                            print(TextGenerator().view_people_stats("colonist", self.colonists, c))
+                            input(TextGenerator().get_press_enter())
                             self.advance_battle_loop(c)
                             
                         
                         elif action == 1:
-                            text_generator.clear_terminal()
+                            TextGenerator().clear_terminal()
                             self.give_weapon_to_colonist(c)
 
                         elif action == 2:
-                            text_generator.clear_terminal()
-                            print(text_generator.header("Who do you want to shoot?"))
-                            print(text_generator.view_people_stats("enemy", self.enemies, is_menue= True)) 
+                            TextGenerator().clear_terminal()
+                            print(TextGenerator().header("Who do you want to shoot?"))
+                            print(TextGenerator().view_people_stats("enemy", self.enemies, is_menue= True)) 
                             target = self.find_enemy(input("Name: "))
 
                             if target == None:
-                                print(text_generator.error("Person you want to shoot does not exist! Try again!"))
+                                TextGenerator().clear_terminal()
+                                print(TextGenerator().error("Person you want to shoot does not exist! Try again!"))
                                 time.sleep(2)
                                 self.advance_battle_loop(c)
                             print(c.shoot(target))
                             time.sleep(3)
 
                         elif action == 3:
-                            text_generator.clear_terminal()
+                            TextGenerator().clear_terminal()
                             print(c.health.get_cover(c.name))
                             time.sleep(2.5)
                     else:
@@ -151,7 +149,7 @@ class RimWorld():
             for e in self.enemies:
                 e.health.reset_protection()
                 action = random.randint(0, 2)
-                text_generator.clear_terminal()
+                TextGenerator().clear_terminal()
                 if e.health.status == "Alive": 
                     if action < 2:
                         target = self.colonists[random.randint(0, len(self.colonists) - 1)]
@@ -188,29 +186,29 @@ class RimWorld():
         return None
     
     def give_weapon_to_colonist(self, colonist = None):
-        print(text_generator.header("Which weapon do you want to equip?"))
-        print(text_generator.view_equipable_weapons(self.weapons, is_menue = True))
+        print(TextGenerator().header("Which weapon do you want to equip?"))
+        print(TextGenerator().view_equipable_weapons(self.weapons, is_menue = True))
         weapon = self.find_weapon(input("Weapon: "))
-        text_generator.clear_terminal()
+        TextGenerator().clear_terminal()
 
         if not colonist:
-            print(text_generator.header("Whom do you want to give the weapon?"))
-            print(text_generator.view_people_stats("colonist", self.colonists, is_menue = True))
+            print(TextGenerator().header("Whom do you want to give the weapon?"))
+            print(TextGenerator().view_people_stats("colonist", self.colonists, is_menue = True))
             colonist = self.find_colonist(input("Name: "))
-            text_generator.clear_terminal()
+            TextGenerator().clear_terminal()
 
         if weapon and colonist:
             x = colonist.equip_weapon(weapon)
             if x[0]:
                 self.weapons.append(x[0])
             self.weapons.remove(x[1])
-            print(text_generator.weapon_equipped(colonist.name, weapon.name, weapon.rarity))
+            print(TextGenerator().weapon_equipped(colonist.name, weapon.name, weapon.rarity))
             time.sleep(3)
 
         else:
-            print(text_generator.error("Colonist or Weapon was not found! Try again!"))
+            print(TextGenerator().error("Colonist or Weapon was not found! Try again!"))
             time.sleep(2.5)
-            text_generator.clear_terminal()
+            TextGenerator().clear_terminal()
             self.give_weapon_to_colonist(colonist)
     
     def find_enemy(self, enemy):

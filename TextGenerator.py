@@ -1,9 +1,8 @@
 from os import system
-
 class TextGenerator():
-    
+
     def clear_terminal(self):
-        _ = system("cls")
+        system("cls")
     
     def get_press_enter(self):
         return "\nPress " + TFormats.bold + "\"enter\"" + TFormats.end + " to continue:  "
@@ -33,7 +32,6 @@ class TextGenerator():
         for human in people:
             if human == name or not(name):
                 text += (self.format_stats_of_human(human.name, human.gender, human.age, human.skill, human.weapon.name, TFormats.rarities[human.weapon.rarity], human.health.points, human.health.status, human.health.color, human.type, human.name_suffix))
-        
         return text
 
     def format_stats_of_human(self, name, gender, age, skill, weapon_name, weapon_color, hp, health_status, health_color, type, name_suffix):

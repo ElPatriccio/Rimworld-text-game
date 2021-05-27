@@ -3,7 +3,7 @@ from Weapon import Weapon
 from random import randint 
 
 
-number_of_colonists = 1
+number_of_colonists = 3
 number_of_weapons = 3
 number_of_enemies = 10
 
