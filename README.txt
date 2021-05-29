@@ -1,2 +1,0 @@
-# Rimworld-text-game
-Lol
