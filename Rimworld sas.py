@@ -73,12 +73,12 @@ class RimWorld():
             
             elif action == 5:
                 TextGenerator().clear_terminal()
-                print(TextGenerator.header("Allah ist groß"))
+                print(TextGenerator().header("Allah ist groß"))
                 time.sleep(3)
-                TextGenerator.clear_terminal()
+                TextGenerator().clear_terminal()
                 print("soos")
                 time.sleep(0.5)
-                TextGenerator.clear_terminal()
+                TextGenerator().clear_terminal()
 
         self.advance_game()
     
