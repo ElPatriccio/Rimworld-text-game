@@ -1,7 +1,5 @@
 from TextGenerator import TextGenerator, TFormats
 
-text_generator = TextGenerator()
-
 class Health():
     def __init__(self, parent) -> None:
         self.points = 100
@@ -14,7 +12,7 @@ class Health():
     def get_cover(self, name):
         self.protection = 2
         self.prot_status = "Behind cover"
-        self.parent.name_suffix = text_generator.get_cover_name_suffix()
+        self.parent.name_suffix = TextGenerator().get_cover_name_suffix()
         return(name + " is hiding behind cover! (2x less hit chance)")
 
     def reset_protection(self):
@@ -39,4 +37,4 @@ class Health():
             self.status ="Dead"
             self.color = TFormats.red
         
-        return text_generator.view_health_of_human(self.parent.name, self.color, self.status, self.points)
+        return TextGenerator().view_health_of_human(self.parent.name, self.color, self.status, self.points)

@@ -1,7 +1,6 @@
 from TextGenerator import TextGenerator
 from Health import Health
 from Weapon import Weapon
-from os import system
 import random
 import time
 

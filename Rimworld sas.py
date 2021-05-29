@@ -1,5 +1,4 @@
 import random
-from typing import Text
 from consts import Consts, ObjectSpawner
 import time
 from TextGenerator import TextGenerator
