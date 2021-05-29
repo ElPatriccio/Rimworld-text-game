@@ -12,6 +12,7 @@ class RimWorld():
         "ew" : 2,
         "ves": 3,
         "eb" : 4,
+        "ied": 5,
     }
 
     __battle_cases = {
@@ -68,6 +69,15 @@ class RimWorld():
                     self.advance_battle()
                 else:
                     self.advance_game()
+            
+            elif action == 5:
+                text_generator.clear_terminal()
+                print(text_generator.header("Allah ist groß"))
+                time.sleep(3)
+                text_generator.clear_terminal()
+                print("soos")
+                time.sleep(0.5)
+                text_generator.clear_terminal()
 
         self.advance_game()
     
