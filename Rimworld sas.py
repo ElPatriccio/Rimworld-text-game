@@ -1,4 +1,5 @@
 import random
+from typing import Text
 from consts import Consts, ObjectSpawner
 import time
 from TextGenerator import TextGenerator
@@ -71,13 +72,13 @@ class RimWorld():
                     self.advance_game()
             
             elif action == 5:
-                text_generator.clear_terminal()
-                print(text_generator.header("Allah ist groß"))
+                TextGenerator().clear_terminal()
+                print(TextGenerator.header("Allah ist groß"))
                 time.sleep(3)
-                text_generator.clear_terminal()
+                TextGenerator.clear_terminal()
                 print("soos")
                 time.sleep(0.5)
-                text_generator.clear_terminal()
+                TextGenerator.clear_terminal()
 
         self.advance_game()
     
