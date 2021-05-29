@@ -5,7 +5,7 @@ from random import randint
 
 number_of_colonists = 1
 number_of_weapons = 3
-number_of_enemies = 3
+number_of_enemies = 2
 
 class ObjectSpawner():
     def __init__(self, num_colonists = 3, num_weapons = 3, num_enemies = 2) -> None:
