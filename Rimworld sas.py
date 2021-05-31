@@ -48,14 +48,14 @@ class RimWorld():
             if action == "vcs":
                 TextGenerator().clear_terminal()
                 print(TextGenerator().view_people_stats("colonist", self.colonists))
-                if c := input(TextGenerator().get_press_enter(True)):
+                if c := input(TextGenerator().get_press_enter(text = "Name")):
                     TextGenerator().clear_terminal()
                     self.give_weapon_to_colonist(colonist = self.find_colonist(c))
             
             elif action == "vew":
                 TextGenerator().clear_terminal()
                 print(TextGenerator().view_equipable_weapons(self.weapons))
-                if w:= input(TextGenerator().get_press_enter()):
+                if w:= input(TextGenerator().get_press_enter(text = "Weapon")):
                     TextGenerator().clear_terminal()
                     self.give_weapon_to_colonist(weapon= self.find_weapon(w))
 

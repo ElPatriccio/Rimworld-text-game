@@ -8,10 +8,10 @@ class ObjectSpawner():
         self.number_colonists = Consts.number_of_colonists
         self.number_weapons = Consts.number_of_weapons
         self.number_enemies = self.all_enemies = Consts.number_of_enemies
-        self.human_base = Consts.human_base
+        self.human_names = Consts.human_names
         self.weapon_base = Consts.weapon_base
 
-        self.colonists = self.generate_people("colonist", self.number_colonists, Consts.settings["colonist_age"], Consts.settings["colonist_skill"])
+        self.colonists = self.generate_people("colonist", self.number_colonists)
         self.weapons = self.generate_weapons(self.number_weapons)
         self.enemies = self.generate_people("enemy", self.number_enemies)
         self.silver = Consts.silver
@@ -19,20 +19,25 @@ class ObjectSpawner():
     def rand(self, max):
         return randint(0, max - 1)
 
-    def generate_people(self, type, max, age= None, skill= None):
+    def generate_people(self, type, max):
         people = []
+        age = Consts.settings[type]["age"]
+        skill = Consts.settings[type]["skill"]
         for i in range(0, max):
             if not age:
                 age = randint(16, 80)
             if not skill:
                 skill = randint(0, 20)
-            index = self.rand(len(self.human_base))
+            index = self.rand(len(self.human_names))
 
             if type == "colonist":
-                people.append(Colonist(self.human_base[index][0], self.human_base[index][1], age, skill))
+                people.append(Colonist(self.human_names[index][0], self.human_names[index][1], age, skill))
 
             elif type == "enemy":
-                people.append(Enemy(self.human_base[index][0], self.human_base[index][1], age, skill))
+                people.append(Enemy(self.human_names[index][0], self.human_names[index][1], age, skill))
+            
+            age = Consts.settings[type]["age"]
+            skill = Consts.settings[type]["skill"]
 
         return people
 
