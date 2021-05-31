@@ -11,7 +11,7 @@ class TextGenerator():
         return "\nAttack enemies? (" + TFormats.green + "y" + TFormats.end + "|" + TFormats.red + "n" + TFormats.end + ") "
     
     def get_start_message(self, colonists, weapons, silver, enemies):
-        return(self.header("You started a new world!\n") + "\nYou own " + str(colonists) + TFormats.green + " colonists" + TFormats.end + ", " + str(weapons) + " weapons and " + str(silver) + " silver. " +  str(enemies) + TFormats.red + " enemies" + TFormats.end + " are roaming in your area.")
+        return(self.header("You started a new world!") + "\n\nYou own " + str(colonists) + TFormats.green + " colonists" + TFormats.end + ", " + str(weapons) + " weapons and " + str(silver) + " silver. " +  str(enemies) + TFormats.red + " enemies" + TFormats.end + " are roaming in your area.")
 
     def get_action_menue(self):
         return self.header("What do you want to do?") + "\n\n-View colonist stats: (vcs)\n-View equipable weapons: (vew)\n-Equip weapon: (ew)\n-View enemy stats: (ves)\n-Engage battle: (eb)\n\nAction:  "
@@ -23,11 +23,13 @@ class TextGenerator():
         text = ""
         if type == "colonist":
             if not is_menue and not name:
-                text = self.header("Your Colony!\n\n")
+                text = self.header("Your Colony!\n")
+            elif not is_menue and name:
+                text = self.header("Stats\n")
 
         elif type == "enemy":
             if not is_menue:
-                text = self.header("Enemies in your area:\n\n")
+                text = self.header("Enemies in your area:\n")
 
         for human in people:
             if human == name or not name:
@@ -45,7 +47,7 @@ class TextGenerator():
         if health_status == "Dead":
             desc_color = TFormats.grey
 
-        return name_color + "--" + name + TFormats.end + name_suffix + name_color + "--" + TFormats.end + desc_color + "\nGender: " + self.attribute(gender) + desc_color +"\nAge: " + self.attribute(str(age)) + desc_color + "\nShooting skill: " + self.attribute(str(skill)) + desc_color + "\nEquipped Weapon: " + self.attribute(weapon_color + weapon_name) + desc_color + "\nHealth: " + health_color + self.attribute(str(hp)) + health_color + self.attribute("%") + TFormats.end + self.attribute(", ") + health_color + self.attribute(health_status) + "\n"
+        return "\n" + name_color + "--" + name + TFormats.end + name_suffix + name_color + "--" + TFormats.end + desc_color + "\nGender: " + self.attribute(gender) + desc_color +"\nAge: " + self.attribute(str(age)) + desc_color + "\nShooting skill: " + self.attribute(str(skill)) + desc_color + "\nEquipped Weapon: " + self.attribute(weapon_color + weapon_name) + desc_color + "\nHealth: " + health_color + self.attribute(str(hp)) + health_color + self.attribute("%") + TFormats.end + self.attribute(", ") + health_color + self.attribute(health_status) + "\n"
 
 
     def view_health_of_human(self, name, health_color, status, hp):

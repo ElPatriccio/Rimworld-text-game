@@ -48,12 +48,16 @@ class RimWorld():
             if action == 0:
                 TextGenerator().clear_terminal()
                 print(TextGenerator().view_people_stats("colonist", self.colonists))
-                input(TextGenerator().get_press_enter())
+                if c := input(TextGenerator().get_press_enter()):
+                    TextGenerator().clear_terminal()
+                    self.give_weapon_to_colonist(colonist = self.find_colonist(c))
             
             elif action == 1:
                 TextGenerator().clear_terminal()
                 print(TextGenerator().view_equipable_weapons(self.weapons))
-                input(TextGenerator().get_press_enter())
+                if w:= input(TextGenerator().get_press_enter()):
+                    TextGenerator().clear_terminal()
+                    self.give_weapon_to_colonist(weapon= self.find_weapon(w))
 
             elif action == 2:
                 TextGenerator().clear_terminal()
@@ -196,11 +200,12 @@ class RimWorld():
                 return w
         return None
     
-    def give_weapon_to_colonist(self, colonist = None):
-        print(TextGenerator().header("Which weapon do you want to equip?"))
-        print(TextGenerator().view_equipable_weapons(self.weapons, is_menue = True))
-        weapon = self.find_weapon(input("Weapon: "))
-        TextGenerator().clear_terminal()
+    def give_weapon_to_colonist(self, colonist = None, weapon = None):
+        if not weapon:
+            print(TextGenerator().header("Which weapon do you want to equip?"))
+            print(TextGenerator().view_equipable_weapons(self.weapons, is_menue = True))
+            weapon = self.find_weapon(input("Weapon: "))
+            TextGenerator().clear_terminal()
 
         if not colonist:
             print(TextGenerator().header("Whom do you want to give the weapon?"))
