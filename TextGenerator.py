@@ -4,8 +4,12 @@ class TextGenerator():
     def clear_terminal(self):
         system("cls")
     
-    def get_press_enter(self):
-        return "\nPress " + TFormats.bold + "\"enter\"" + TFormats.end + " to continue:  "
+    def get_press_enter(self, text = "", has_more_functionality = False):
+        if has_more_functionality:
+            if not text:
+                text = "command"
+        extension = " or type " + text if has_more_functionality else ""
+        return "\nPress " + TFormats.bold + "\"enter\"" + TFormats.end + " to continue" + extension + ":  "
     
     def get_attack_enemies(self):
         return "\nAttack enemies? (" + TFormats.green + "y" + TFormats.end + "|" + TFormats.red + "n" + TFormats.end + ") "

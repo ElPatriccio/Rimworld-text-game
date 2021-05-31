@@ -7,6 +7,7 @@ from TextGenerator import TextGenerator
 battle_not_over = True
 
 class RimWorld():
+    # TODO __game_cases serves no use other than summarizing all possibilities to the devs -> Comment all ifs with its purpose 
     __game_cases = {
         "vcs" : 0,
         "vew" : 1,
@@ -15,7 +16,7 @@ class RimWorld():
         "eb" : 4,
         "ied": 5,
     }
-
+    # TODO __battle_cases serves no use other than summarizing all possibilities to the devs -> Comment all ifs with its purpose
     __battle_cases = {
         "vs" : 0,
         "ew" : 1,
@@ -44,38 +45,37 @@ class RimWorld():
         action = input(TextGenerator().get_action_menue())
 
         if self.__game_cases.get(action, None) != None:
-            action = self.__game_cases[action]
-            if action == 0:
+            if action == "vcs":
                 TextGenerator().clear_terminal()
                 print(TextGenerator().view_people_stats("colonist", self.colonists))
-                if c := input(TextGenerator().get_press_enter()):
+                if c := input(TextGenerator().get_press_enter(True)):
                     TextGenerator().clear_terminal()
                     self.give_weapon_to_colonist(colonist = self.find_colonist(c))
             
-            elif action == 1:
+            elif action == "vew":
                 TextGenerator().clear_terminal()
                 print(TextGenerator().view_equipable_weapons(self.weapons))
                 if w:= input(TextGenerator().get_press_enter()):
                     TextGenerator().clear_terminal()
                     self.give_weapon_to_colonist(weapon= self.find_weapon(w))
 
-            elif action == 2:
+            elif action == "ew":
                 TextGenerator().clear_terminal()
                 self.give_weapon_to_colonist()
 
-            elif action == 3:
+            elif action == "ves":
                 TextGenerator().clear_terminal()
                 print(TextGenerator().view_people_stats("enemy", self.enemies))
                 input(TextGenerator().get_press_enter())
 
-            elif action == 4:
+            elif action == "eb":
                 term = input(TextGenerator().get_attack_enemies())
                 if  term == "y":
                     self.advance_battle()
                 else:
                     self.advance_game()
             
-            elif action == 5:
+            elif action == "ied":
                 TextGenerator().clear_terminal()
                 print(TextGenerator().header("Allah ist groß"))
                 time.sleep(3)
@@ -119,19 +119,18 @@ class RimWorld():
                     action = input(TextGenerator().get_battle_action_menue(c.name))
                     
                     if self.__battle_cases.get(action, None) != None:
-                        action = self.__battle_cases[action]
-                        if action == 0:
+                        if action == "vs":
                             TextGenerator().clear_terminal()
                             print(TextGenerator().view_people_stats("colonist", self.colonists, c))
                             input(TextGenerator().get_press_enter())
                             self.advance_battle_loop(c)
                             
                         
-                        elif action == 1:
+                        elif action == "ew":
                             TextGenerator().clear_terminal()
                             self.give_weapon_to_colonist(c)
 
-                        elif action == 2:
+                        elif action == "se":
                             TextGenerator().clear_terminal()
                             print(TextGenerator().header("Who do you want to shoot?"))
                             print(TextGenerator().view_people_stats("enemy", self.enemies, is_menue= True)) 
@@ -145,7 +144,7 @@ class RimWorld():
                             print(c.shoot(target))
                             time.sleep(3)
 
-                        elif action == 3:
+                        elif action == "hbc":
                             TextGenerator().clear_terminal()
                             print(c.health.get_cover(c.name))
                             time.sleep(2.5)
