@@ -1,4 +1,5 @@
 from os import system
+from time import sleep
 class TextGenerator():
 
     def clear_terminal(self):
@@ -94,6 +95,11 @@ class TextGenerator():
 
     def error(self, text):
         return TFormats.red + TFormats.bold + "ERROR: " + TFormats.end + text
+    
+    def perform_error_message(self, text):
+        self.clear_terminal()
+        print(self.error(text))
+        sleep(2)
 
 class TFormats():
     end = "\033[0m"

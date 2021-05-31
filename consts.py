@@ -24,7 +24,7 @@ class Consts():
 
     ## SETTINGS ##
     
-    number_of_colonists = 5
+    number_of_colonists = 3
     number_of_weapons = 3
     number_of_enemies = all_enemies = 2
     silver = 500

@@ -40,28 +40,35 @@ class RimWorld():
         self.advance_game()
     
 
-    def advance_game(self):
+    def advance_game(self, action = None):
         TextGenerator().clear_terminal()
-        action = input(TextGenerator().get_action_menue())
+        if not action:
+            action = input(TextGenerator().get_action_menue())
 
         if self.__game_cases.get(action, None) != None:
             if action == "vcs":
                 TextGenerator().clear_terminal()
-                print(TextGenerator().view_people_stats("colonist", self.colonists))
-                if c := input(TextGenerator().get_press_enter(text = "Name")):
-                    TextGenerator().clear_terminal()
-                    self.give_weapon_to_colonist(colonist = self.find_colonist(c))
+                print(TextGenerator().view_people_stats("colonist", self.colonists)) 
+                if c := input(TextGenerator().get_press_enter(text = "Name")): 
+                    if not(c := self.find_colonist(c)):
+                        TextGenerator().perform_error_message("Colonist was not found! Try again!")
+                        self.advance_game(action = "vcs")
+                    else:
+                        self.give_weapon_to_colonist(colonist = c)
             
             elif action == "vew":
                 TextGenerator().clear_terminal()
                 print(TextGenerator().view_equipable_weapons(self.weapons))
                 if w:= input(TextGenerator().get_press_enter(text = "Weapon")):
-                    TextGenerator().clear_terminal()
-                    self.give_weapon_to_colonist(weapon= self.find_weapon(w))
+                    if not(w := self.find_weapon(w)):
+                        TextGenerator().perform_error_message("Weapon was not found! Try again!")
+                        self.advance_game(action = "vew")
+                    else:
+                        self.give_weapon_to_colonist(weapon= w)
 
             elif action == "ew":
                 TextGenerator().clear_terminal()
-                self.give_weapon_to_colonist()
+                self.give_weapon_to_colonist()                    
 
             elif action == "ves":
                 TextGenerator().clear_terminal()
@@ -122,13 +129,18 @@ class RimWorld():
                         if action == "vs":
                             TextGenerator().clear_terminal()
                             print(TextGenerator().view_people_stats("colonist", self.colonists, c))
-                            input(TextGenerator().get_press_enter())
-                            self.advance_battle_loop(c)
+                            if input(TextGenerator().get_press_enter(text= c.name)):
+                                TextGenerator().clear_terminal()
+                                if error := self.give_weapon_to_colonist(c):
+                                    self.advance_battle_loop(c)
+                            else:
+                                self.advance_battle_loop(c)
                             
                         
                         elif action == "ew":
                             TextGenerator().clear_terminal()
-                            self.give_weapon_to_colonist(c)
+                            if error := self.give_weapon_to_colonist(c):
+                                self.advance_battle_loop(c)
 
                         elif action == "se":
                             TextGenerator().clear_terminal()
@@ -193,38 +205,41 @@ class RimWorld():
                 num +=1
         return num
     
-    def find_weapon(self, weapon):
-        for w in self.weapons:
-            if w.name == weapon or w.short_name == weapon:
-                return w
-        return None
-    
     def give_weapon_to_colonist(self, colonist = None, weapon = None):
-        if not weapon:
+        while not weapon:
+            TextGenerator().clear_terminal()
             print(TextGenerator().header("Which weapon do you want to equip?"))
             print(TextGenerator().view_equipable_weapons(self.weapons, is_menue = True))
             weapon = self.find_weapon(input("Weapon: "))
+            if not weapon:
+                TextGenerator().perform_error_message("Weapon not found! Try again!")
+            
+        while not colonist:
             TextGenerator().clear_terminal()
-
-        if not colonist:
             print(TextGenerator().header("Whom do you want to give the weapon?"))
             print(TextGenerator().view_people_stats("colonist", self.colonists, is_menue = True))
-            colonist = self.find_colonist(input("Name: "))
-            TextGenerator().clear_terminal()
+            colonist = self.find_colonist(input("Name:  "))
+            if not colonist:
+                TextGenerator().perform_error_message("Colonist not found! Try again!")
 
         if weapon and colonist:
             x = colonist.equip_weapon(weapon)
             if x[0]:
                 self.weapons.append(x[0])
             self.weapons.remove(x[1])
+            TextGenerator().clear_terminal()
             print(TextGenerator().weapon_equipped(colonist.name, weapon.name, weapon.rarity))
             time.sleep(3)
 
         else:
-            print(TextGenerator().error("Colonist or Weapon was not found! Try again!"))
-            time.sleep(2.5)
-            TextGenerator().clear_terminal()
-            self.give_weapon_to_colonist(colonist)
+            TextGenerator().perform_error_message("Colonist or Weapon not found! Try again")
+            return True                         ## True means something went wrong
+
+    def find_weapon(self, weapon):
+        for w in self.weapons:
+            if w.name == weapon or w.short_name == weapon:
+                return w
+        return None
     
     def find_enemy(self, enemy):
         for e in self.enemies:
