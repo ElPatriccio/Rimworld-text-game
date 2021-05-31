@@ -22,15 +22,15 @@ class TextGenerator():
     def view_people_stats(self, type, people, name = None, is_menue = False):
         text = ""
         if type == "colonist":
-            if not(is_menue):
-                text = self.header("Your Colony!\n")
+            if not is_menue and not name:
+                text = self.header("Your Colony!\n\n")
 
         elif type == "enemy":
-            if not(is_menue):
-                text = self.header("Enemies in your area:\n")
+            if not is_menue:
+                text = self.header("Enemies in your area:\n\n")
 
         for human in people:
-            if human == name or not(name):
+            if human == name or not name:
                 text += (self.format_stats_of_human(human.name, human.gender, human.age, human.skill, human.weapon.name, TFormats.rarities[human.weapon.rarity], human.health.points, human.health.status, human.health.color, human.type, human.name_suffix))
         return text
 
@@ -45,7 +45,7 @@ class TextGenerator():
         if health_status == "Dead":
             desc_color = TFormats.grey
 
-        return "\n" + name_color + "--" + name + TFormats.end + name_suffix + name_color + "--" + TFormats.end + desc_color + "\nGender: " + self.attribute(gender) + desc_color +"\nAge: " + self.attribute(str(age)) + desc_color + "\nShooting skill: " + self.attribute(str(skill)) + desc_color + "\nEquipped Weapon: " + self.attribute(weapon_color + weapon_name) + desc_color + "\nHealth: " + health_color + self.attribute(str(hp)) + health_color + self.attribute("%") + TFormats.end + self.attribute(", ") + health_color + self.attribute(health_status) + "\n"
+        return name_color + "--" + name + TFormats.end + name_suffix + name_color + "--" + TFormats.end + desc_color + "\nGender: " + self.attribute(gender) + desc_color +"\nAge: " + self.attribute(str(age)) + desc_color + "\nShooting skill: " + self.attribute(str(skill)) + desc_color + "\nEquipped Weapon: " + self.attribute(weapon_color + weapon_name) + desc_color + "\nHealth: " + health_color + self.attribute(str(hp)) + health_color + self.attribute("%") + TFormats.end + self.attribute(", ") + health_color + self.attribute(health_status) + "\n"
 
 
     def view_health_of_human(self, name, health_color, status, hp):
