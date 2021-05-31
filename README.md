@@ -1,2 +1,3 @@
 # Rimworld-text-game
-Lol
+
+Just playing around with Python OOP!
