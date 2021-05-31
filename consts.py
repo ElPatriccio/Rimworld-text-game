@@ -32,7 +32,7 @@ class Consts():
     # if None is passed in, it will be generated randomly (Default = None)
     settings = {
         "colonist_age" : None,
-        "colonist_skill": 20,
+        "colonist_skill": None,
         "enemy_age" : None,
         "enemy_skill" : None,
     }
