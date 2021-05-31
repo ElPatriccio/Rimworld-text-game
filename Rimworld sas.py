@@ -1,5 +1,6 @@
 import random
-from consts import Consts, ObjectSpawner
+from consts import Consts
+from ObjectSpawner import ObjectSpawner
 import time
 from TextGenerator import TextGenerator
 
@@ -152,7 +153,7 @@ class RimWorld():
             return 2
 
         chance = random.randint(0, 100)
-        if chance >= ((alive_enemies / Consts.enemyMoral) * 100) and alive_enemies >= 1:
+        if chance >= ((alive_enemies / Consts.all_enemies) * 100) and alive_enemies >= 1:
             return 3   
 
         if not colonist:
@@ -237,4 +238,5 @@ class RimWorld():
         return num
 
 if __name__ == "__main__":
-    world = RimWorld(Consts.colonists, Consts.silver, Consts.weapons, Consts.enemies)
+    object_spawner = ObjectSpawner()
+    world = RimWorld(object_spawner.colonists, object_spawner.silver, object_spawner.weapons, object_spawner.enemies)

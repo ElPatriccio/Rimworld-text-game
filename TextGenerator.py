@@ -59,16 +59,18 @@ class TextGenerator():
             text = ""
 
         for weapon in weapons:
-            text += self.format_stats_of_weapon(weapon.name, weapon.short_name, weapon.damage, weapon.shots, weapon.rarity, is_menue)
+            text += self.format_stats_of_weapon(weapon.name, weapon.short_name, weapon.damage, weapon.bonus_damage, weapon.shots, weapon.rarity, is_menue)
         
         return text
     
-    def format_stats_of_weapon(self, name, short_name, damage, shots, rarity, is_menue):
+    def format_stats_of_weapon(self, name, short_name, damage, bonus_damage, shots, rarity, is_menue):
         short = ""
         if short_name and is_menue:
             short = " (" + short_name + ")"
 
-        return ("\n" + self.color_rarity("--" + name  + "--", rarity) + TFormats.end + short + "\nDamage: " + str(damage) + "\nShots per round: " + str(shots) + "\nRarity: " + self.color_rarity(rarity, rarity) +"\n")
+        bonus_damage = self.color_rarity(" (+" + str(bonus_damage) + ")", rarity) if bonus_damage else ""
+
+        return ("\n" + self.color_rarity("--" + name  + "--", rarity) + TFormats.end + short + "\nDamage: " + str(damage) + bonus_damage +"\nShots per round: " + str(shots) + "\nRarity: " + self.color_rarity(rarity, rarity) +"\n")
 
     def weapon_equipped(self, name, weapon, rarity):
         return name + " equipped a " + self.color_rarity(rarity, rarity) + " " + weapon +"!"

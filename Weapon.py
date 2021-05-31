@@ -1,12 +1,13 @@
-from math import floor
+from math import floor, ceil
 from TextGenerator import TFormats
 from random import randint
+from consts import Consts
 
 class Weapon():
     def __init__(self, name, shots, damage, short_name = None, rarity= None) -> None:
         self.name = name
         self.short_name = short_name
-        
+
         if rarity == None and not(self.name == "No weapon"):
             self.rarity = self.get_random_rarity()
 
@@ -16,7 +17,8 @@ class Weapon():
             self.rarity = rarity
 
         self.shots = shots
-        self.damage = damage
+        self.bonus_damage = ceil(Consts.weapon_bonus_damage[self.rarity] / self.shots) if self.shots else 0
+        self.damage = damage + self.bonus_damage
         self.status = 1
 
         if self.name == "No weapon":
