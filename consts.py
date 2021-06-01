@@ -40,9 +40,14 @@ class Consts():
         "skill" : None,
     }
 
+    settings_health = {
+        "downed-hp" : 15
+    }
+
     settings = {
         "colonist" : settings_colonist,
         "enemy" : settings_enemy,
+        "health" : settings_health,
     }
 
     weapon_bonus_damage = {

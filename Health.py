@@ -1,3 +1,5 @@
+from consts import Consts
+from time import sleep
 from TextGenerator import TextGenerator, TFormats
 
 class Health():
@@ -27,14 +29,32 @@ class Health():
         self.points -= damage
         return self.update_health()
     
-    def update_health(self):
-        if self.points <= 15:
-            self.status = "Downed"
-            self.color = TFormats.orange
-        
-        if self.points <= 0:
-            self.points = 0
-            self.status ="Dead"
-            self.color = TFormats.red
+    def recover(self, remove = False):
+        if remove:
+            self.status = "Alive"
+            self.color = TFormats.green
+            print(TextGenerator().color_type_human(self.parent.name, self.parent.type) + " is fully recovered!")
+        else:
+            self.status = "Recovering"
+            self.color = TFormats.cyan
+
+    def heal(self, hp=10):
+        self.points += hp
+        if self.points >= 100:
+            self.points = 100
+            self.recover(remove = True)
+        else:
+            print(self.update_health(heal = True))
+    
+    def update_health(self, heal=False):
+        if not heal:
+            if self.points <= Consts.settings["health"]["downed-hp"]:
+                self.status = "Downed"
+                self.color = TFormats.orange
+            
+            if self.points <= 0:
+                self.points = 0
+                self.status ="Dead"
+                self.color = TFormats.red
         
         return TextGenerator().view_health_of_human(TextGenerator().color_type_human(self.parent.name, self.parent.type), self.color, self.status, self.points)

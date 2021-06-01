@@ -38,7 +38,7 @@ class Human():
                 time.sleep(0.5)
 
         print(str(accuracy)+"% Chance!")
-        return target.health.take_damage(self.weapon.damage * hits)
+        return "\n" + target.health.take_damage(self.weapon.damage * hits)
 
 class Colonist(Human):
     def __init__(self, name, gender, age, skill) -> None:

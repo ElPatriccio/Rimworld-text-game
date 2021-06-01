@@ -48,7 +48,7 @@ class RimWorld():
         if self.__game_cases.get(action, None) != None:
             if action == "vcs":
                 TextGenerator().clear_terminal()
-                print(TextGenerator().view_people_stats("colonist", self.colonists)) 
+                print(TextGenerator().view_people_stats(self.colonists)) 
                 if c := input(TextGenerator().get_press_enter(text = "Name")): 
                     if not(c := self.find_colonist(c)):
                         TextGenerator().perform_error_message("Colonist was not found! Try again!")
@@ -72,7 +72,7 @@ class RimWorld():
 
             elif action == "ves":
                 TextGenerator().clear_terminal()
-                print(TextGenerator().view_people_stats("enemy", self.enemies))
+                print(TextGenerator().view_people_stats(self.enemies))
                 input(TextGenerator().get_press_enter())
 
             elif action == "eb":
@@ -118,6 +118,10 @@ class RimWorld():
         time.sleep(3)               
                     
     def advance_battle_loop(self, colonist):
+        if not colonist:
+            for e in self.enemies:
+                e.cooldown = False
+
         for c in self.colonists:
             c.health.reset_protection()
             TextGenerator().clear_terminal()
@@ -127,7 +131,7 @@ class RimWorld():
 
                     if action == "vs":
                         TextGenerator().clear_terminal()
-                        print(TextGenerator().view_people_stats("colonist", self.colonists, c))
+                        print(TextGenerator().view_people_stats(self.colonists, c))
                         if input(TextGenerator().get_press_enter(text= c.name)):
                             TextGenerator().clear_terminal()
                             if self.give_weapon_to_colonist(c) == False:
@@ -149,31 +153,59 @@ class RimWorld():
                         TextGenerator().clear_terminal()
                         print(c.health.get_cover(c.name, c.type))
                         time.sleep(2.5)
+                    
+                    elif action == "rc":
+                        if self.rescue_colonist(c) == False:
+                            self.advance_battle_loop(c) 
+
                     else:
                         self.advance_battle_loop(c)
+
+                elif c.health.status == "Recovering" and not c.cooldown:
+                    c.health.heal(10)
+                    time.sleep(3.5)
+                    if c.health.status == "Alive":
+                        self.advance_battle_loop(c)
+        
+        for c in self.colonists:
+            c.cooldown = False
 
         alive_enemies = self.get_alive_enemies()
         if alive_enemies == -1:
             return 2
 
         chance = random.randint(0, 100)
-        if chance >= ((alive_enemies / Consts.all_enemies) * 100) and alive_enemies >= 1:
+        if chance >= ((alive_enemies / Consts.all_enemies) * 100 + 10) and alive_enemies >= 1:
             return 3   
 
         if not colonist:
             for e in self.enemies:
                 e.health.reset_protection()
-                action = random.randint(0, 2)
+                action = random.randint(0, 3)
                 TextGenerator().clear_terminal()
+
                 if e.health.status == "Alive": 
+                    if action == 3:
+                        if self.get_downed_enemies() > 0:
+                            target = self.get_random_downed_enemy()
+                            print(TextGenerator().get_rescue_msg(e, target))
+                            target.cooldown = True
+                            time.sleep(3)
+                            target.health.recover()
+                        else:
+                            self.shoot_colonist(e)
+
                     if action < 2:
-                        target = self.colonists[random.randint(0, len(self.colonists) - 1)]
-                        print(e.shoot(target))
-                        time.sleep(3)
+                        self.shoot_colonist(e)
 
                     elif action == 2:
                         print(e.health.get_cover(e.name, e.type))
                         time.sleep(2.5)
+                
+                elif e.health.status == "Recovering":
+                    if not e.cooldown:
+                        e.health.heal(10)
+                        time.sleep(3.5) 
         
         alive_colonists = self.get_alive_colonists()
         if alive_colonists == 0:
@@ -183,17 +215,45 @@ class RimWorld():
 
     def find_colonist(self, colonist):
         for c in self.colonists:
-            if c.name == colonist:
+            if c.name.lower() == colonist.lower():
                 return c
         return None 
 
     def get_alive_colonists(self):
         num = 0
         for c in self.colonists:
-            if c.health.status == "Alive":
+            if c.health.status == "Alive" or c.health.status == "Recovering":
                 num +=1
         return num
     
+    def get_downed_colonists(self):
+        num = 0
+        for c in self.colonists:
+            if c.health.status == "Downed":
+                num += 1
+        return num
+    
+    def rescue_colonist(self, c, target=None):
+        if self.get_downed_colonists() == 0:
+            TextGenerator().perform_error_message("There is no one to rescue!")
+            return False
+
+        while not target:
+            TextGenerator().clear_terminal()
+            print(TextGenerator().header("Downed Colonists"))
+            print(TextGenerator().view_downed_colonists(self.colonists))
+            
+            if target := input(TextGenerator().get_press_enter(text= "Name")):
+                TextGenerator().clear_terminal()
+                if (target := self.find_colonist(target)) == None:
+                    TextGenerator().perform_error_message("Colonist was not found! Try again!")
+            else:   
+                return False
+        print(TextGenerator().get_rescue_msg(c, target))
+        target.cooldown = True
+        time.sleep(3)
+        target.health.recover()
+
     def give_weapon_to_colonist(self, colonist = None, weapon = None):
         while not weapon:
             TextGenerator().clear_terminal()
@@ -208,7 +268,7 @@ class RimWorld():
         while not colonist:
             TextGenerator().clear_terminal()
             print(TextGenerator().header("Whom do you want to give the weapon?"))
-            print(TextGenerator().view_people_stats("colonist", self.colonists, is_menue = True))
+            print(TextGenerator().view_people_stats(self.colonists, is_menue = True))
             if not (colonist := input(TextGenerator().get_press_enter(text="Name"))):
                 return False
             else:
@@ -230,20 +290,25 @@ class RimWorld():
 
     def find_weapon(self, weapon):
         for w in self.weapons:
-            if w.name == weapon or w.short_name == weapon:
+            if not w.short_name:
+                short = ""
+            else:
+                short = w.short_name.lower()
+
+            if w.name.lower() == weapon.lower() or short == weapon.lower():
                 return w
         return None
     
     def find_enemy(self, enemy):
         for e in self.enemies:
-            if e.name == enemy:
+            if e.name.lower() == enemy.lower():
                 return e
         return None 
     
     def shoot_enemy(self, c):
         TextGenerator().clear_terminal()
         print(TextGenerator().header("Who do you want to shoot?"))
-        print(TextGenerator().view_people_stats("enemy", self.enemies, is_menue= True)) 
+        print(TextGenerator().view_people_stats(self.enemies, is_menue= True)) 
 
         if target := input(TextGenerator().get_press_enter(text="Name")):
             if not (target := self.find_enemy(target)):
@@ -258,11 +323,31 @@ class RimWorld():
     def get_alive_enemies(self):
         num = 0
         for e in self.enemies:
-            if e.health.status == "Alive":
+            if e.health.status == "Alive" or e.health.status == "Recovering":
                 num+=1
         if num == 0:
             return -1
         return num
+
+    def get_downed_enemies(self):
+        num = 0
+        for e in self.enemies:
+            if e.health.status == "Downed":
+                num += 1
+        return num
+    
+    def get_random_downed_enemy(self):
+        enemies_downed = []
+        for e in self.enemies:
+            if e.health.status == "Downed":
+                enemies_downed.append(e)
+        index = random.randint(0, len(enemies_downed) - 1)
+        return enemies_downed[index]
+
+    def shoot_colonist(self, e):
+        target = self.colonists[random.randint(0, len(self.colonists) - 1)]
+        print(e.shoot(target))
+        time.sleep(3)
 
 if __name__ == "__main__":
     object_spawner = ObjectSpawner()
