@@ -22,9 +22,9 @@ class ObjectSpawner():
     def generate_people(self, type, max):
         people = []
         for i in range(0, max):
-            if age := Consts.settings[type]["age"] == None:
+            if (age := Consts.settings[type]["age"]) == None:
                 age = randint(16, 80)
-            if skill := Consts.settings[type]["skill"] == None:
+            if (skill := Consts.settings[type]["skill"]) == None:
                 skill = randint(0, 20)
             index = self.rand(len(self.human_names))
 

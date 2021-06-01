@@ -1,4 +1,4 @@
-from TextGenerator import TextGenerator
+from TextGenerator import TFormats, TextGenerator
 from Health import Health
 from Weapon import Weapon
 import random
@@ -23,7 +23,7 @@ class Human():
     def shoot(self, target):
         TextGenerator().clear_terminal()
         accuracy =  self.weapon.calc_accuracy(self.skill) / target.health.protection
-        print(self.name + " is shooting " + target.name + "!\n")
+        print(TextGenerator().get_shoot_message(self, target))
         time.sleep(2.5)
 
         hits = 0

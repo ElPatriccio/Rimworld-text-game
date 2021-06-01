@@ -147,7 +147,7 @@ class RimWorld():
 
                     elif action == "hbc":
                         TextGenerator().clear_terminal()
-                        print(c.health.get_cover(c.name))
+                        print(c.health.get_cover(c.name, c.type))
                         time.sleep(2.5)
                     else:
                         self.advance_battle_loop(c)
@@ -172,7 +172,7 @@ class RimWorld():
                         time.sleep(3)
 
                     elif action == 2:
-                        print(e.health.get_cover(e.name))
+                        print(e.health.get_cover(e.name, e.type))
                         time.sleep(2.5)
         
         alive_colonists = self.get_alive_colonists()
@@ -221,7 +221,7 @@ class RimWorld():
                 self.weapons.append(x[0])
             self.weapons.remove(x[1])
             TextGenerator().clear_terminal()
-            print(TextGenerator().weapon_equipped(colonist.name, weapon.name, weapon.rarity))
+            print(TextGenerator().weapon_equipped(colonist.name, colonist.type, weapon.name, weapon.rarity))
             time.sleep(3)
 
         else:

@@ -9,11 +9,11 @@ class Health():
         self.prot_status = "Unprotected"
         self.parent = parent
     
-    def get_cover(self, name):
+    def get_cover(self, name, type):
         self.protection = 2
         self.prot_status = "Behind cover"
         self.parent.name_suffix = TextGenerator().get_cover_name_suffix()
-        return(name + " is hiding behind cover! (2x less hit chance)")
+        return TextGenerator().get_cover_msg(self.parent.name, self.parent.type)
 
     def reset_protection(self):
         self.protection = 1
@@ -22,7 +22,7 @@ class Health():
 
     def take_damage(self, damage):
         if self.status == "Dead":
-            return (self.parent.name + " is dead!")
+            return (TextGenerator().perform_error_message(TextGenerator().color_type_human(self.parent.name, self.parent.type) + " is dead!"))
         
         self.points -= damage
         return self.update_health()
@@ -37,4 +37,4 @@ class Health():
             self.status ="Dead"
             self.color = TFormats.red
         
-        return TextGenerator().view_health_of_human(self.parent.name, self.color, self.status, self.points)
+        return TextGenerator().view_health_of_human(TextGenerator().color_type_human(self.parent.name, self.parent.type), self.color, self.status, self.points)

@@ -50,8 +50,17 @@ class TextGenerator():
         
         if health_status == "Dead":
             desc_color = TFormats.grey
+        
+        if skill <= 3:
+            skill_color = TFormats.red
+        elif skill >= 15 and skill < 20:
+            skill_color = TFormats.cyan
+        elif skill == 20:
+            skill_color = TFormats.bold + TFormats.orange
+        else:
+            skill_color = ""
 
-        return "\n" + name_color + "--" + name + TFormats.end + name_suffix + name_color + "--" + TFormats.end + desc_color + "\nGender: " + self.attribute(gender) + desc_color +"\nAge: " + self.attribute(str(age)) + desc_color + "\nShooting skill: " + self.attribute(str(skill)) + desc_color + "\nEquipped Weapon: " + self.attribute(weapon_color + weapon_name) + desc_color + "\nHealth: " + health_color + self.attribute(str(hp)) + health_color + self.attribute("%") + TFormats.end + self.attribute(", ") + health_color + self.attribute(health_status) + "\n"
+        return "\n" + name_color + "--" + name + TFormats.end + name_suffix + name_color + "--" + TFormats.end + desc_color + "\nGender: " + self.attribute(gender) + desc_color +"\nAge: " + self.attribute(str(age)) + desc_color + "\nShooting skill: " + skill_color + self.attribute(str(skill)) + desc_color + "\nEquipped Weapon: " + self.attribute(weapon_color + weapon_name) + desc_color + "\nHealth: " + health_color + self.attribute(str(hp)) + health_color + self.attribute("%") + self.attribute(", ") + health_color + self.attribute(health_status) + "\n"
 
 
     def view_health_of_human(self, name, health_color, status, hp):
@@ -78,11 +87,17 @@ class TextGenerator():
 
         return ("\n" + self.color_rarity("--" + name  + "--", rarity) + TFormats.end + short + "\nDamage: " + str(damage) + bonus_damage +"\nShots per round: " + str(shots) + "\nRarity: " + self.color_rarity(rarity, rarity) +"\n")
 
-    def weapon_equipped(self, name, weapon, rarity):
-        return name + " equipped a " + self.color_rarity(rarity, rarity) + " " + weapon +"!"
+    def weapon_equipped(self, name, type, weapon, rarity):
+        return self.color_type_human(name, type) + " equipped a " + self.color_rarity(rarity, rarity) + " " + weapon +"!"
+
+    def get_cover_msg(self, name, type):
+        return self.color_type_human(name, type) + " is hiding behind cover!" + TFormats.bold + TFormats.yellow + " (2x" + TFormats.end + TFormats.yellow + " less hit chance)" + TFormats.end
 
     def get_cover_name_suffix(self):
         return TFormats.yellow + " (" + TFormats.bold + "HIDING! 2x" + TFormats.end + TFormats.yellow +  " less hit chance)" + TFormats.end
+
+    def get_shoot_message(self, shooter, target):
+        return self.color_type_human(shooter.name, shooter.type) + TFormats.end + " is shooting " + self.color_type_human(target.name, target.type) + "!\n"
 
     def header(self, text):
         return TFormats.bold + TFormats.cyan + text + TFormats.end
@@ -92,6 +107,9 @@ class TextGenerator():
 
     def color_rarity(self, text, rarity):
         return TFormats.rarities[rarity] + text + TFormats.end
+    
+    def color_type_human(self, name, type):
+        return TFormats.cyan + name + TFormats.end if type == "colonist" else TFormats.magenta + name + TFormats.end
 
     def error(self, text):
         return TFormats.red + TFormats.bold + "ERROR: " + TFormats.end + text
