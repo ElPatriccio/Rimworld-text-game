@@ -9,7 +9,7 @@ class TextGenerator():
         has_more_functionality = True if text else False
         text = TFormats.bold + text + TFormats.end
         extension = " or type " + text if has_more_functionality else ""
-        return "\nPress " + TFormats.bold + "\"enter\"" + TFormats.end + " to continue" + extension +":  "
+        return "\nPress " + TFormats.bold + "\"enter\"" + TFormats.end + " to return to menue" + extension +":  "
     
     def get_attack_enemies(self):
         return "\nAttack enemies? (" + TFormats.green + "y" + TFormats.end + "|" + TFormats.red + "n" + TFormats.end + ") "
