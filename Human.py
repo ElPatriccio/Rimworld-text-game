@@ -8,6 +8,7 @@ class Human():
     def __init__(self, name, gender, age, skill) -> None:
         self.name = name
         self.name_suffix = ""
+        self.index = ""
         self.gender = gender
         self.age = age
         self.skill = skill
@@ -16,6 +17,9 @@ class Human():
     
     def reset_name_suffix(self):
         self.name_suffix = ""
+    
+    def reset_index(self):
+        self.index = ""
 
     def has_weapon(self):
         return False if not(self.weapon.status) else True

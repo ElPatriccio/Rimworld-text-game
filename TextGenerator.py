@@ -37,10 +37,10 @@ class TextGenerator():
 
         for human in people:
             if human == target or not target:
-                text += (self.format_stats_of_human(human.name, human.gender, human.age, human.skill, human.weapon.name, TFormats.rarities[human.weapon.rarity], human.health.points, human.health.status, human.health.color, human.type, human.name_suffix))
+                text += (self.format_stats_of_human(human.name, human.gender, human.age, human.skill, human.weapon.name, TFormats.rarities[human.weapon.rarity], human.health.points, human.health.status, human.health.color, human.type, human.name_suffix, human.index))
         return text
 
-    def format_stats_of_human(self, name, gender, age, skill, weapon_name, weapon_color, hp, health_status, health_color, type, name_suffix):
+    def format_stats_of_human(self, name, gender, age, skill, weapon_name, weapon_color, hp, health_status, health_color, type, name_suffix, index):
         desc_color = ""
         if type == "colonist":
             name_color = TFormats.cyan
@@ -60,7 +60,7 @@ class TextGenerator():
         else:
             skill_color = ""
 
-        return "\n" + name_color + "--" + name + TFormats.end + name_suffix + name_color + "--" + TFormats.end + desc_color + "\nGender: " + self.attribute(gender) + desc_color +"\nAge: " + self.attribute(str(age)) + desc_color + "\nShooting skill: " + skill_color + self.attribute(str(skill)) + desc_color + "\nEquipped Weapon: " + self.attribute(weapon_color + weapon_name) + desc_color + "\nHealth: " + health_color + self.attribute(str(hp)) + health_color + self.attribute("%") + self.attribute(", ") + health_color + self.attribute(health_status) + "\n"
+        return "\n" + name_color + "--" + name + TFormats.end + name_suffix + name_color + "--" + TFormats.end + index + desc_color + "\nGender: " + self.attribute(gender) + desc_color +"\nAge: " + self.attribute(str(age)) + desc_color + "\nShooting skill: " + skill_color + self.attribute(str(skill)) + desc_color + "\nEquipped Weapon: " + self.attribute(weapon_color + weapon_name) + desc_color + "\nHealth: " + health_color + self.attribute(str(hp)) + health_color + self.attribute("%") + self.attribute(", ") + health_color + self.attribute(health_status) + "\n"
 
 
     def view_health_of_human(self, name, health_color, status, hp):
@@ -81,18 +81,18 @@ class TextGenerator():
             text = ""
 
         for weapon in weapons:
-            text += self.format_stats_of_weapon(weapon.name, weapon.short_name, weapon.damage, weapon.bonus_damage, weapon.shots, weapon.rarity, is_menue)
+            text += self.format_stats_of_weapon(weapon.name, weapon.short_name, weapon.damage, weapon.bonus_damage, weapon.shots, weapon.rarity, weapon.index)
         
         return text
     
-    def format_stats_of_weapon(self, name, short_name, damage, bonus_damage, shots, rarity, is_menue):
+    def format_stats_of_weapon(self, name, short_name, damage, bonus_damage, shots, rarity, index):
         short = ""
         if short_name:
             short = " (" + short_name + ")"
 
         bonus_damage = self.color_rarity(" (+" + str(bonus_damage) + ")", rarity) if bonus_damage else ""
 
-        return ("\n" + self.color_rarity("--" + name  + "--", rarity) + TFormats.end + short + "\nDamage: " + str(damage) + bonus_damage +"\nShots per round: " + str(shots) + "\nRarity: " + self.color_rarity(rarity, rarity) +"\n")
+        return ("\n" + self.color_rarity("--" + name  + "--", rarity) + TFormats.end + short + index +"\nDamage: " + str(damage) + bonus_damage +"\nShots per round: " + str(shots) + "\nRarity: " + self.color_rarity(rarity, rarity) +"\n")
 
     def weapon_equipped(self, name, type, weapon, rarity):
         return self.color_type_human(name, type) + " equipped a " + self.color_rarity(rarity, rarity) + " " + weapon +"!"
