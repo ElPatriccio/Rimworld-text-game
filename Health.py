@@ -1,5 +1,4 @@
 from consts import Consts
-from time import sleep
 from TextGenerator import TextGenerator, TFormats
 
 class Health():

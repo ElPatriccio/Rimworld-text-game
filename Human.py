@@ -1,4 +1,4 @@
-from TextGenerator import TFormats, TextGenerator
+from TextGenerator import TextGenerator
 from Health import Health
 from Weapon import Weapon
 import random
