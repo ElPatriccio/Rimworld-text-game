@@ -45,53 +45,52 @@ class RimWorld():
         if not action:
             action = input(TextGenerator().get_action_menue())
 
-        if self.__game_cases.get(action, None) != None:
-            if action == "vcs":
-                TextGenerator().clear_terminal()
-                print(TextGenerator().view_people_stats(self.colonists)) 
-                if c := input(TextGenerator().get_press_enter(text = "Name")):
-                    c = self.find_thing(c, "colonist") 
-                    if not(c):
-                        TextGenerator().perform_error_message("Colonist was not found! Try again!")
-                        self.advance_game(action = "vcs")
-                    elif c != -1:
-                        self.give_weapon_to_colonist(colonist = c)
-            
-            elif action == "vew":
-                TextGenerator().clear_terminal()
-                print(TextGenerator().view_equipable_weapons(self.weapons))
-                if w:= input(TextGenerator().get_press_enter(text = "Weapon")):
-                    w = self.find_thing(w, "weapon")
-                    if not(w):
-                        TextGenerator().perform_error_message("Weapon was not found! Try again!")
-                        self.advance_game(action = "vew")
-                    elif w != -1:
-                        self.give_weapon_to_colonist(weapon= w)
+        if action == "vcs":
+            TextGenerator().clear_terminal()
+            print(TextGenerator().view_people_stats(self.colonists)) 
+            if c := input(TextGenerator().get_press_enter(text = "Name")):
+                c = self.find_thing(c, "colonist") 
+                if not(c):
+                    TextGenerator().perform_error_message("Colonist was not found! Try again!")
+                    self.advance_game(action = "vcs")
+                elif c != -1:
+                    self.give_weapon_to_colonist(colonist = c)
+        
+        elif action == "vew":
+            TextGenerator().clear_terminal()
+            print(TextGenerator().view_equipable_weapons(self.weapons))
+            if w:= input(TextGenerator().get_press_enter(text = "Weapon")):
+                w = self.find_thing(w, "weapon")
+                if not(w):
+                    TextGenerator().perform_error_message("Weapon was not found! Try again!")
+                    self.advance_game(action = "vew")
+                elif w != -1:
+                    self.give_weapon_to_colonist(weapon= w)
 
-            elif action == "ew":
-                TextGenerator().clear_terminal()
-                self.give_weapon_to_colonist()                    
+        elif action == "ew":
+            TextGenerator().clear_terminal()
+            self.give_weapon_to_colonist()                    
 
-            elif action == "ves":
-                TextGenerator().clear_terminal()
-                print(TextGenerator().view_people_stats(self.enemies))
-                input(TextGenerator().get_press_enter())
+        elif action == "ves":
+            TextGenerator().clear_terminal()
+            print(TextGenerator().view_people_stats(self.enemies))
+            input(TextGenerator().get_press_enter())
 
-            elif action == "eb":
-                term = input(TextGenerator().get_attack_enemies())
-                if  term == "y":
-                    self.advance_battle()
-                else:
-                    self.advance_game()
-            
-            elif action == "ied":
-                TextGenerator().clear_terminal()
-                print(TextGenerator().header("Allah ist groß"))
-                time.sleep(3)
-                TextGenerator().clear_terminal()
-                print("soos")
-                time.sleep(0.5)
-                TextGenerator().clear_terminal()
+        elif action == "eb":
+            term = input(TextGenerator().get_attack_enemies())
+            if  term == "y":
+                self.advance_battle()
+            else:
+                self.advance_game()
+        
+        elif action == "ied":
+            TextGenerator().clear_terminal()
+            print(TextGenerator().header("Allah ist groß"))
+            time.sleep(3)
+            TextGenerator().clear_terminal()
+            print("soos")
+            time.sleep(0.5)
+            TextGenerator().clear_terminal()
 
         self.advance_game()
     
