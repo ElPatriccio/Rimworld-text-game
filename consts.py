@@ -6,6 +6,8 @@ class Consts():
         ["Revolver", 1, 10, None],
         ["Bolt-Action-Rifle", 2, 8, "bar"],
         ["SMG", 3, 5, None],
+        ["Sniper-Rifle", 1, 20, "sr"],
+        ["Chain-Shotgun", 3, 4, "cs"]
     ]
 
     #Name, gender

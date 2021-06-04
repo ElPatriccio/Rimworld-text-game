@@ -28,7 +28,7 @@ class Human():
         TextGenerator().clear_terminal()
         accuracy =  self.weapon.calc_accuracy(self.skill) / target.health.protection
         print(TextGenerator().get_shoot_message(self, target))
-        time.sleep(2.5)
+        time.sleep(3)
 
         hits = 0
         for i in range(0, self.weapon.shots): 

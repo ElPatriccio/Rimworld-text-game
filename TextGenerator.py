@@ -104,7 +104,7 @@ class TextGenerator():
         return TFormats.yellow + " (" + TFormats.bold + "HIDING! 2x" + TFormats.end + TFormats.yellow +  " less hit chance)" + TFormats.end
 
     def get_shoot_message(self, shooter, target):
-        return self.color_type_human(shooter.name, shooter.type) + " is shooting " + self.color_type_human(target.name, target.type) + "!\n"
+        return self.color_type_human(shooter.name, shooter.type) + " is shooting " + self.color_type_human(target.name, target.type) + " with a " + self.color_rarity(shooter.weapon.rarity, shooter.weapon.rarity) + " " + shooter.weapon.name +"!\n"
 
     def get_rescue_msg(self, healer, target):
         return self.color_type_human(healer.name, healer.type) + " is helping " + self.color_type_human(target.name, target.type) + "!"    
